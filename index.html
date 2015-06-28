@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+    <title>pepper β</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="./js/jquery-1.11.1.min.js"><\/script>');</script>
+    <script type="text/javascript" src="js/THREEx.WindowResize.js"></script>
+    <script type="text/javascript" src="js/three.min.js"></script>
+    <!--<script type="text/javascript" src="js/WebGLDeferredRenderer.js"></script>-->
+    <!--<script type="text/javascript" src="js/command.js"></script>-->
+    <!--<script type="text/javascript" src="js/saying.js"></script>-->
+    <script type="text/javascript" src="js/audio.js"></script>
+    <!--<script type="text/javascript" src="js/wsa.js"></script>-->
+
+</head>
+<body>
+    <script type="text/javascript" src="js/webGL.js"></script>
+<input id="file" type="file" accept="audio/*">
+<div id="difference"></div>
+<div id="Ava"></div>
+<script type="text/javascript">
+//function------------------------------
+$(window).keydown(function (e){
+    console.log("down: "+e.which);
+    if(e.which === 13){//"return"が押された時
+        $("#file").click();//曲選択
+        return false; // must!
+    }
+    if(e.which === 9){//"tab"が押された時
+    }
+    if(e.which === 27){//"esc"が押された時
+    }
+    if(e.which === 69){//"e"が押された時
+
+    }
+    //e.preventDefault(false);
+});
+</script>
+</body>
+</html>
