@@ -12,24 +12,55 @@
 
 </head>
 <body>
+<div id="settingScreen"></div>
     <script type="text/javascript" src="js/webGL.js"></script>
 <input id="file" type="file" accept="audio/*">
 <div id="difference"></div>
 <div id="Ava"></div>
 <script type="text/javascript">
+
 //function------------------------------
+var puttingTabCounter = 0;
+
+
+$(window).resize(function() {
+    if(puttingTabCounter%2 === 1){ 
+        console.log('resized');
+        $("#settingScreen").css("width",$(window).width()/5).css("height",$(window).height());
+        $("canvas").css("width",$(window).width()*3/4).css("height",$(window).height());
+    }
+});
+
+
 $(window).keydown(function (e){
     console.log("down: "+e.which);
     if(e.which === 13){//"return"が押された時
         $("#file").click();//曲選択
-        return false; // must!
+        return false; // must!らしい
     }
     if(e.which === 9){//"tab"が押された時
+        puttingTabCounter++;
+        if(puttingTabCounter%2 === 1){//設定画面を開く
+            $("canvas").css("float","right");
+            $("canvas").css("width",$(window).width()*3/4);
+
+            $("#settingScreen").css("width",$(window).width()/5).css("height",$(window).height());
+            $("#settingScreen").css("display","block");
+        }else{//閉じる
+            $("#settingScreen").css("display","none");
+            $("canvas").css("float","left");
+            $("canvas").css("width",$(window).width());
+
+        }
+        e.preventDefault(false);
     }
     if(e.which === 27){//"esc"が押された時
     }
+<<<<<<< HEAD
     if(e.which === 69){//"e"が押された時
     }
+=======
+>>>>>>> master
     //e.preventDefault(false);
 });
 </script>
