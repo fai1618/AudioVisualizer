@@ -6,3 +6,10 @@
         /*color:rgb(44,255,88);*/
         color:rgb(0,200,255);
     }
+
+    #settingScreen{
+    	float:left;
+        background-color:skyblue;
+        opacity:0.5;
+        display:none;
+    }
