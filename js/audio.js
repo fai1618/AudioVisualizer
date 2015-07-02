@@ -1,5 +1,9 @@
   var source, animationId;
-  var audioContext = new AudioContext;
+  // Safariでは動かない
+  //var audioContext = new AudioContext;
+  // Safariでも動く
+  var AudioContext = window.AudioContext || window.webkitAudioContext,
+    audioContext      = new AudioContext();
   var fileReader   = new FileReader;
 
   var analyser = audioContext.createAnalyser();
