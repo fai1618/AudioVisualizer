@@ -45,12 +45,12 @@ $(function(){//これないとうごかない
     var counts = 0;
     var Ava = 0;
     spectrums = new Uint8Array(analyser.frequencyBinCount);
-    
+
     analyser.getByteFrequencyData(spectrums);
-    
+
     for(var i=0, len=spectrums.length; i<len; i++){
       Ava += spectrums[i];
-      if(spectrums[i] !=0){
+      if(spectrums[i] !==0){
         counts++;
       }
     }//for
