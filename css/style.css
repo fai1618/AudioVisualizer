@@ -7,7 +7,7 @@
 
     #settingScreen{
     	float:left;
-        background-color:skyblue;
-        opacity:0.5;
+        background-color:white;
+        opacity:1.0;
         display:none;
     }

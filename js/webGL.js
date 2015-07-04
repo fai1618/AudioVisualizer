@@ -120,13 +120,14 @@
                 scene.add(ring);
                 scene.add(ring2);
             }else{
-                if(ringAddCounter === 60 && difference > 10){
+                if(ringAddCounter > 60 && difference > 10){
                     scene.add(ringA);
                     scene.add(ringA2);
-                }else{
-                    if(ringAddCounter > 70 && difference > 10){
-                        //scene.add(Icos);
-                    }
+                }
+                if(ringAddCounter > 70 && difference > 10){
+                        ring.rotation.y += 1/8*Math.PI;
+                        ring2.rotation.y += 1/8*Math.PI;
+                        
                 }
             }
         }
@@ -180,6 +181,9 @@
             ringA2.scale.z += difference/100;
         }
 
+
+
+
         if(ringAddCounter < 10){//最初はカメラ1つだけ
             renderer.clear();
             renderer.render( scene, IcosCamera );
@@ -218,8 +222,8 @@
     });
     //-----------------------------------------------
     function move(object,camera,difference,moveMax,moveMin){//カメラ追従ない場合、camera : null
-        var addPositionX = Math.round(difference*100)/10*Math.random()*(2 - 0.5+1)+0.5;
-        var addPositionY = -1+Math.round(difference*100)/10*Math.random()*(1.5 - 0.5+1)+0.5;
+        var addPositionX = Math.round(difference*100)/100*Math.random()*(2 - 0.5+1)+0.5;
+        var addPositionY = -1+Math.round(difference*100)/100*Math.random()*(1.5 - 0.5+1)+0.5;
         var addPositionZ = Math.round((Math.random() * (moveMax - moveMin + 1) + moveMin)*difference*1000)/1000;
 
         //マイナスが少ない気がするので付け足し
@@ -244,12 +248,50 @@
             }
 
             if(camera !== null){
-                switch(randomMovingJudge){
-                    case 0:camera.position.x -= addPositionX;break;
-                    case 1:camera.position.y -= addPositionY;break;
-                    case 2:camera.position.z -= addPositionZ;break;
+
+                console.log(addPositionX);
+                switch(randomMovingJudge){//少しの動きならカメラを動かさない
+                    case 0:if ( addPositionX < -5 || 5 < addPositionX){camera.position.x -= addPositionX;}break;
+                    case 1:if ( addPositionY < -5 || 5 < addPositionY){camera.position.y -= addPositionY;}break;
+                    case 2:if ( addPositionZ < -5 || 5 < addPositionZ){camera.position.z -= addPositionZ;}break;
                     default:alert("randomMovingJudge("+camera+"):無効な値");
                 }
+                    
+
+                    if(camera === IcosCamera){
+                        if( object.position.x - camera.position.x > 30 || object.position.x - camera.position.x < 20){
+                            camera.position.x = object.position.x+25;
+                        }
+                        if( object.position.x - camera.position.x < -30 || object.position.x - camera.position.x > -20){
+                            camera.position.x = object.position.x-25;
+                        }
+
+                    }else{
+                        if(camera.position.x - object.position.x > 5 || camera.position.x - object.position.x < -5){
+                            camera.position.x = object.position.x;
+                        }
+                    }
+
+
+                if(camera.position.y - object.position.y > 5 || camera.position.y - object.position.y < -5){
+                    camera.position.y = object.position.y;
+                }
+
+
+                    if(camera === Icos2Camera){
+                        if( object.position.z - camera.position.z > 30 || object.position.z - camera.position.z < 20){
+                            camera.position.z = object.position.z+25;
+                        }
+                        if( object.position.z - camera.position.z < -30 || object.position.z - camera.position.z > -20){
+                            camera.position.z = object.position.z-25;
+                        }
+                    }else{
+                        if(camera.position.z - object.position.z > 5 || camera.position.z - object.position.z < -5){
+                            camera.position.z = object.position.z;
+                        }
+                    }
+
+
             }
         }
     }
