@@ -1,5 +1,9 @@
   var source, animationId;
-  var audioContext = new AudioContext;
+  // Safariでは動かない
+  //var audioContext = new AudioContext;
+  // Safariでも動く
+  var AudioContext = window.AudioContext || window.webkitAudioContext,
+    audioContext      = new AudioContext();
   var fileReader   = new FileReader;
 
   var analyser = audioContext.createAnalyser();
@@ -41,12 +45,12 @@ $(function(){//これないとうごかない
     var counts = 0;
     var Ava = 0;
     spectrums = new Uint8Array(analyser.frequencyBinCount);
-    
+
     analyser.getByteFrequencyData(spectrums);
-    
+
     for(var i=0, len=spectrums.length; i<len; i++){
       Ava += spectrums[i];
-      if(spectrums[i] !=0){
+      if(spectrums[i] !==0){
         counts++;
       }
     }//for
