@@ -4,7 +4,7 @@ var stats;
 // 左上に表示するようCSSを記述してbody直下に表示
 stats = new Stats();
 stats.domElement.style.position = 'absolute';
-stats.domElement.style.left = '0px';
+stats.domElement.style.right = '0px';
 stats.domElement.style.top = '0px';
 document.body.appendChild(stats.domElement);
 
@@ -44,7 +44,17 @@ THREEx.WindowResize(renderer, IcosCamera);
 THREEx.WindowResize(renderer, Icos2Camera);
 THREEx.WindowResize(renderer, topCamera);
 $("body").append(renderer.domElement);
+
+
+
 // オブジェクト追加 ----------------------------------------
+
+
+
+
+
+
+
 var IcosGeometry = new THREE.IcosahedronGeometry(2.5, 1);
 var IcosMaterial = new THREE.MeshBasicMaterial({
     color: 0x00c8ff,
@@ -58,7 +68,7 @@ scene.add(Icos);
 
 var Icos2Geometry = new THREE.IcosahedronGeometry(2.5, 0);
 var Icos2Material = new THREE.MeshBasicMaterial({
-    color: 0x00ffc8,
+    color: 0xff00c8,
     wireframe: true,
     wireframeLinewidth: 1,
     opacity: 0.1
@@ -85,7 +95,7 @@ ringA.lookAt(IcosCamera.position);
 
 var ring2Geometry = new THREE.RingGeometry(5, 5.05, 6); //内側の半径,外側の半径,頂点の数
 var ring2Material = new THREE.MeshBasicMaterial({
-    color: 0x00ffc8,
+    color: 0xff00c8,
     side: THREE.DoubleSide
 });
 var ring2 = new THREE.Mesh(ring2Geometry, ring2Material);
@@ -99,8 +109,8 @@ ringA2.position.set(Icos2.position.x, Icos2.position.y, Icos2.position.z);
 ringA2.lookAt(Icos2Camera.position);
 //scene.add(ringA2);
 
-var speedy = 0.1;
-var speedx = 0.1;
+var speedy = 0.1/16;
+var speedx = 0.1/16;
 var preIcosPosition = {};
 var preIcos2Position = {};
 var ringAddCounter = 0;
@@ -110,92 +120,91 @@ function render() {
     stats.begin();
 
 
-
-    Icos.rotation.y -= speedy / 8 * Math.random();
-    Icos.rotation.x += speedx / 8;
-    Icos2.rotation.y -= speedy / 16 * Math.random();
-    Icos2.rotation.x += speedx / 16;
-
-    ringRotation("ring", speedx / 16, speedy / 16 * Math.random(), speedx / 16);
-
-    ringRotation("ring2", speedx / 16, speedy / 16 * Math.random(), speedx / 16);
+    Icos.rotation.y -= speedy*2 * Math.random();
+    Icos.rotation.x += speedx*2;
+    Icos2.rotation.y -= speedy * Math.random();
+    Icos2.rotation.x += speedx;
 
 
+    ringRotation("ring", speedx, speedy * Math.random(), speedx);
+    ringRotation("ring2", speedx, speedy * Math.random(), speedx);
 
-    if (difference > 0.01) {
 
-        ringScale(1 + difference / 50 * 2);
+    if (audio.difference > 0.01) {
 
-        Icos.rotation.y -= speedy * Math.random() * difference;
-        Icos.rotation.x += speedx * difference * (Math.random() + 1);
-        Icos2.rotation.y -= speedy * Math.random() * difference;
-        Icos2.rotation.x += speedx * difference * (Math.random() + 0.5);
+        ringScale(1 + audio.difference / 25);
+
+        Icos.rotation.y -= speedy*16 * Math.random() * audio.difference;
+        Icos.rotation.x += speedx*16 * audio.difference * (Math.random() + 1);
+        Icos2.rotation.y -= speedy*16 * Math.random() * audio.difference;
+        Icos2.rotation.x += speedx*16 * audio.difference * (Math.random() + 0.5);
     }
 
 
 
-    if (difference > 1) {
+    if (audio.difference > 1) { //Icos2
         //IcosMaterial.color.set('#'+Math.floor(Math.random() * 0xFFFFFF).toString(16));
         //Icos2Material.color.set('#'+Math.floor(Math.random() * 0xFFFFFF).toString(16));
-    }
 
-
-
-    if (difference > 5) { //ring判定
-        ringAddCounter++;
-        if (ringAddCounter === 50) { //最初にringを描画
-            scene.add(ring);
-            scene.add(ring2);
-        } else {
-            if (ringAddCounter > 70 && difference > 10) {
-                scene.add(ringA);
-                scene.add(ringA2);
-            }
-        }
-    }
-
-
-
-    if (difference > 2) { //Icos
-        //lineを引くため
-        preIcosPosition.x = Icos.position.x;
-        preIcosPosition.y = Icos.position.y;
-        preIcosPosition.z = Icos.position.z;
-        //動き
-        move(Icos, IcosCamera, difference, 3, -3);
-        //chaseLine
-        addLine(Icos, preIcosPosition, 0x00c8ff);
-
-        ring.position.set(Icos.position.x, Icos.position.y, Icos.position.z);
-        ringA.position.set(Icos.position.x, Icos.position.y, Icos.position.z);
-    }
-
-
-
-    if (difference > 1) { //Icos2
         //lineを引くため
         preIcos2Position.x = Icos2.position.x;
         preIcos2Position.y = Icos2.position.y;
         preIcos2Position.z = Icos2.position.z;
 
-        move(Icos2, Icos2Camera, difference, 3, -3);
+        move(Icos2, Icos2Camera, audio.difference, 3, -3);
 
         if (ringAddCounter >= 10) { //カメラ1つのときは緑の線引かない
-            addLine(Icos2, preIcos2Position, 0x00ffc8);
+            addLine(Icos2, preIcos2Position, 0xff00c8);
         }
 
         ring2.position.set(Icos2.position.x, Icos2.position.y, Icos2.position.z);
         ringA2.position.set(Icos2.position.x, Icos2.position.y, Icos2.position.z);
 
-        ring2.scale.x += difference / 100;
-        ring2.scale.y += difference / 100;
-        ring2.scale.z += difference / 100;
+        ring2.scale.x += audio.difference / 100;
+        ring2.scale.y += audio.difference / 100;
+        ring2.scale.z += audio.difference / 100;
 
-        ringA2.scale.x += difference / 100;
-        ringA2.scale.y += difference / 100;
-        ringA2.scale.z += difference / 100;
-    }
+        ringA2.scale.x += audio.difference / 100;
+        ringA2.scale.y += audio.difference / 100;
+        ringA2.scale.z += audio.difference / 100;
 
+
+
+        if (audio.difference > 2) { //Icos
+            //lineを引くため
+            preIcosPosition.x = Icos.position.x;
+            preIcosPosition.y = Icos.position.y;
+            preIcosPosition.z = Icos.position.z;
+            //動き
+            move(Icos, IcosCamera, audio.difference, 3, -3);
+            //chaseLine
+            addLine(Icos, preIcosPosition, 0x00c8ff);
+
+            ring.position.set(Icos.position.x, Icos.position.y, Icos.position.z);
+            ringA.position.set(Icos.position.x, Icos.position.y, Icos.position.z);
+
+
+
+            if (audio.difference > 5) { //ring判定
+                ringAddCounter++;
+                if (ringAddCounter === 50) { //最初にringを描画
+                    scene.add(ring);
+                    scene.add(ring2);
+                } else {
+                    if (ringAddCounter > 70 && audio.difference > 10) {
+                        scene.add(ringA);
+                        scene.add(ringA2);
+                    }
+                }
+            }//difference>5
+
+
+
+        }//difference>2
+
+
+
+    }//difference>1
 
 
 
@@ -235,13 +244,8 @@ function render() {
 
     stats.end();
 
-    requestAnimationFrame(render);
+    window.requestAnimationFrame(render);
 }
-
-$(function () {
-    //render();
-    requestAnimationFrame( render );
-});
 
 
 
@@ -252,18 +256,19 @@ function move(object, camera, difference, moveMax, moveMin) { //カメラ追従�
     var addPositionZ = Math.round((Math.random() * (moveMax - moveMin + 1) + moveMin) * difference * 1000) / 1000;
 
     //マイナスが少ない気がするので付け足し
-    if (Math.random() >= 0.4) {
+    var addPositionJudge = Math.random();
+    if (addPositionJudge >= 0.4) {
         addPositionX *= -1;
     }
-    if (Math.random() >= 0.4) {
+    if (addPositionJudge >= 0.4) {
         addPositionY *= -1;
     }
-    if (Math.random() >= 0.4) {
+    if (addPositionJudge >= 0.4) {
         addPositionZ *= -1;
     }
 
     //x,y,zどの方向に動くか
-    var randomMovingJudge = Math.floor(Math.random() * (2 - 0 + 1)) + 0;    //JudgeMax:2, JudgeMin:0
+    var randomMovingJudge = Math.floor(Math.random() * (2 - 0 + 1)) + 0; //JudgeMax:2, JudgeMin:0
     if (difference > 0.01) {
         switch (randomMovingJudge) {
         case 0:
@@ -300,61 +305,65 @@ function move(object, camera, difference, moveMax, moveMin) { //カメラ追従�
                 alert("randomMovingJudge(" + camera + "):無効な値");
             }
 
-
-            if (camera === IcosCamera) {
-                if (object.position.x - camera.position.x > 30 || object.position.x - camera.position.x < 20) {
-                    camera.position.x = object.position.x + 25;
-                }
-                if (object.position.x - camera.position.x < -30 || object.position.x - camera.position.x > -20) {
-                    camera.position.x = object.position.x - 25;
-                }
-
-            } else {
-                if (camera.position.x - object.position.x > 5 || camera.position.x - object.position.x < -5) {
-                    camera.position.x = object.position.x;
-                }
-            }
-
-
-            if (camera.position.y - object.position.y > 5 || camera.position.y - object.position.y < -5) {
-                camera.position.y = object.position.y;
-            }
-
-
-            if (camera === Icos2Camera) {
-                if (object.position.z - camera.position.z > 30 || object.position.z - camera.position.z < 20) {
-                    camera.position.z = object.position.z + 25;
-                }
-                if (object.position.z - camera.position.z < -30 || object.position.z - camera.position.z > -20) {
-                    camera.position.z = object.position.z - 25;
-                }
-            } else {
-                if (camera.position.z - object.position.z > 5 || camera.position.z - object.position.z < -5) {
-                    camera.position.z = object.position.z;
-                }
-            }
+            cameraMovingJudge(camera,object);
 
         }
     }
 }
 //-----------------------------------------------
-function addLine(object, prePosition, color) {
-    var lineGeometry = new THREE.Geometry();
-    var lineMaterial = new THREE.LineBasicMaterial({
-        color: color
-    });
-    lineGeometry.vertices.push(new THREE.Vector3(prePosition.x, prePosition.y, prePosition.z));
-    lineGeometry.vertices.push(new THREE.Vector3(object.position.x, object.position.y, object.position.z));
-    var line = new THREE.Line(lineGeometry, lineMaterial);
-    scene.add(line);
+function cameraMovingJudge(camera,object){//物体がどれくらいカメラの中心から離れたらカメラを移動させるか
+    if (camera.position.y - object.position.y > 5 || camera.position.y - object.position.y < -5) {
+        camera.position.y = object.position.y;
+    }
+
+
+
+    if (camera === IcosCamera) {
+        if (object.position.x - camera.position.x > 30 || object.position.x - camera.position.x < 20) {
+            camera.position.x = object.position.x + 25;
+        }
+        if (object.position.x - camera.position.x < -30 || object.position.x - camera.position.x > -20) {
+            camera.position.x = object.position.x - 25;
+        }
+    } else {
+        if (camera.position.x - object.position.x > 5 || camera.position.x - object.position.x < -5) {
+            camera.position.x = object.position.x;
+        }
+    }
+
+
+
+    if (camera === Icos2Camera) {
+        if (object.position.z - camera.position.z > 30 || object.position.z - camera.position.z < 20) {
+            camera.position.z = object.position.z + 25;
+        }
+        if (object.position.z - camera.position.z < -30 || object.position.z - camera.position.z > -20) {
+            camera.position.z = object.position.z - 25;
+        }
+    } else {
+        if (camera.position.z - object.position.z > 5 || camera.position.z - object.position.z < -5) {
+            camera.position.z = object.position.z;
+        }
+    }
 }
 //-----------------------------------------------
+function addLine(object, prePosition, color) {
+        var lineGeometry = new THREE.Geometry();
+        var lineMaterial = new THREE.LineBasicMaterial({
+            color: color
+        });
+        lineGeometry.vertices.push(new THREE.Vector3(prePosition.x, prePosition.y, prePosition.z));
+        lineGeometry.vertices.push(new THREE.Vector3(object.position.x, object.position.y, object.position.z));
+        var line = new THREE.Line(lineGeometry, lineMaterial);
+        scene.add(line);
+    }
+//-----------------------------------------------
 function ringScale(scale) {
-    ring.scale.set(scale, scale, scale);
-    ringA.scale.set(scale, scale, scale);
-    ring2.scale.set(scale, scale, scale);
-    ringA2.scale.set(scale, scale, scale);
-}
+        ring.scale.set(scale, scale, scale);
+        ringA.scale.set(scale, scale, scale);
+        ring2.scale.set(scale, scale, scale);
+        ringA2.scale.set(scale, scale, scale);
+    }
 //-----------------------------------------------
 function ringRotation(object, speedx, speedy, speedz) {
     if (object === "ring") {
