@@ -8,27 +8,32 @@
     <script>window.jQuery || document.write('<script src="./js/jquery-1.11.1.min.js"><\/script>');</script>
     <script type="text/javascript" src="js/THREEx.WindowResize.js"></script>
     <script type="text/javascript" src="js/three.min.js"></script>
+    <script type="text/javascript" src="js/Stats.js"></script>
     <script type="text/javascript" src="js/audio.js"></script>
-
 </head>
 <body>
-<div id="settingScreen">
-</div>
+<div id="settingScreen"></div>
     <script type="text/javascript" src="js/webGL.js"></script>
-<input id="file" type="file" accept="audio/*">
-<div id="difference"></div>
-<div id="Ava"></div>
 <script type="text/javascript">
-
+//audio.jsのインスタンス
+var audio = new audioVisualize();
+$(function(){
+    audio.arduinoJudge = false;//arduino使わない
+    audio.addInputDom();//ファイル読み込みdom
+    audio.addAveDifferenceDom();//数値表示dom
+    audio.addChangeEvent();//ファイルが読み込まれたときのイベント
+    audio.render();//音流す
+    render();
+});
 //function------------------------------
 var puttingTabCounter = 0;
 
 
 $(window).resize(function() {
-    if(puttingTabCounter%2 === 1){ 
+    if(puttingTabCounter%2 === 1){
         console.log('resized');
         $("#settingScreen").css("width",$(window).width()/5).css("height",$(window).height());
-        $("canvas").css("width",$(window).width()*3/4).css("height",$(window).height());
+        $("#threejs").css("width",$(window).width()*3/4).css("height",$(window).height());
     }
 });
 
@@ -42,9 +47,9 @@ $(window).keydown(function (e){
     if(e.which === 9){//"tab"が押された時
         puttingTabCounter++;
         if(puttingTabCounter%2 === 1){//設定画面を開く
-            $("canvas").css("float","right");
-            $("canvas").css("width",$(window).width()*3/4);
-            
+            $("#threejs").css("float","right");
+            $("#threejs").css("width",$(window).width()*3/4);
+
 
             renderer.setSize( $(window).width()*3/4, $(window).height() );
             if(ringAddCounter < 10){//最初はカメラ1つだけ
@@ -58,15 +63,17 @@ $(window).keydown(function (e){
                 Icos2Camera.updateProjectionMatrix();
                 topCamera.updateProjectionMatrix();
             }
-            
+
 
             $("#settingScreen").css("width",$(window).width()/5).css("height",$(window).height());
             $("#settingScreen").css("display","block");
         }else{//閉じる
-            
+
             $("#settingScreen").css("display","none");
-            $("canvas").css("float","left");
-            $("canvas").css("width",$(window).width());
+            $("#threejs").css("float","left");
+            $("#threejs").css("width",$(window).width());
+
+            renderer.setSize( $(window).width(), $(window).height());
 
             if(ringAddCounter < 10){//最初はカメラ1つだけ
                 IcosCamera.aspect = $(window).width() / $(window).height();
@@ -87,8 +94,12 @@ $(window).keydown(function (e){
     }
     if(e.which === 69){//"e"が押された時
     }
+    if(e.which === 76){//"l"が押された時
+        $("#line-visualizer").css("display","inline");//displayを初期値に戻す
+    }
     //e.preventDefault(false);
 });
 </script>
+<script type="text/javascript" src="js/line-visualizer.js"></script>
 </body>
 </html>
