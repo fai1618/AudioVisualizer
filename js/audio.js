@@ -1,16 +1,17 @@
 var audioVisualize = function(){
+    var self = this;
     var source,animationId;
     // Safariでも動く
     var AudioContext = window.AudioContext || window.webkitAudioContext;
     var audioContext = new AudioContext();
     var fileReader   = new FileReader();
 
-    var analyser = audioContext.createAnalyser();
-    analyser.fftSize = 2048;
-    analyser.smoothingTimeConstant = 0.9;//defoult:0.8
-    analyser.connect(audioContext.destination);
+    self.analyser = audioContext.createAnalyser();
+    self.analyser.fftSize = 2048;
+    self.analyser.smoothingTimeConstant = 0.9;//defoult:0.8
+    self.analyser.connect(audioContext.destination);
 
-    var animationJudge = false;
+    self.animationJudge = false;
     var ave_diffShowJudge = false;//renderでAve,differenceをdivに描画するかどうか
 
     fileReader.onload = function () {
@@ -18,15 +19,15 @@ var audioVisualize = function(){
         audioContext.decodeAudioData(fileReader.result, function (buffer) {
             if (source) {
                 source.stop();
-                animationJudge = false;
+                self.animationJudge = false;
             }
 
             source = audioContext.createBufferSource();
             source.buffer = buffer;
-            source.connect(analyser);
+            source.connect(self.analyser);
             source.start(0);
 
-            animationJudge = true;
+            self.animationJudge = true;
         });
     };
 
@@ -64,11 +65,11 @@ var audioVisualize = function(){
     var i = 0,len = 0;
 
     this.render = function() {
-        if(animationJudge){
+        if(self.animationJudge){
             spectrumCounts = 0,this.ave = 0;
-            spectrums = new Uint8Array(analyser.frequencyBinCount);
+            spectrums = new Uint8Array(self.analyser.frequencyBinCount);
 
-            analyser.getByteFrequencyData(spectrums);
+            self.analyser.getByteFrequencyData(spectrums);
 
             for (i = 0, len = spectrums.length; i < len; i++) {
                 this.ave += spectrums[i];

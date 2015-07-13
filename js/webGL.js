@@ -37,6 +37,7 @@ topCamera.lookAt(new THREE.Vector3(0, 0, 0));
 var renderer = new THREE.WebGLRenderer({
     antialias: true
 });
+renderer.domElement.id = "threejs";
 renderer.setSize(width, height); // canvasのサイズ設定
 renderer.autoClear = false;
 var THREEx = THREEx;
@@ -44,6 +45,7 @@ THREEx.WindowResize(renderer, IcosCamera);
 THREEx.WindowResize(renderer, Icos2Camera);
 THREEx.WindowResize(renderer, topCamera);
 $("body").append(renderer.domElement);
+
 
 
 
