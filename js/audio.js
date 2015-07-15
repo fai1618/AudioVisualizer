@@ -6,9 +6,46 @@ var audioVisualize = function(){
     var audioContext = new AudioContext();
     var fileReader   = new FileReader();
 
+
+
+//フィルター(add!!!!!)
+    filter = audioContext.createBiquadFilter();
+    //filter.type = 0;
+    filter.frequency.value = 440;
+
+    this.init = function (){
+        var audioObj = {"audio":true};
+
+        //エラー処理
+        var errBack = function(e){
+            console.log("Web Audio error:",e.code);
+        };
+
+        //WebAudioリクエスト成功時に呼び出されるコールバック関数
+        function gotStream(stream){
+            //streamからAudioNodeを作成
+            var mediaStreamSource = audioContext.createMediaStreamSource(stream);
+
+            mediaStreamSource.connect(filter);
+
+            filter.connect(self.analyser);
+
+            self.animationJudge = true;
+        }
+        //マイクの有無を調べる
+        if(navigator.webkitGetUserMedia){
+            //マイク使って良いか聞いてくる
+            navigator.webkitGetUserMedia(audioObj,gotStream,errBack);
+        }else{
+            alert("マイクデバイスがありません");
+        }
+    }
+
+
+
     self.analyser = audioContext.createAnalyser();
-    self.analyser.fftSize = 2048;
-    self.analyser.smoothingTimeConstant = 0.9;//defoult:0.8
+    self.analyser.fftSize = 1024;
+    self.analyser.smoothingTimeConstant = 0.8;//defoult:0.8
     self.analyser.connect(audioContext.destination);
 
     self.animationJudge = false;
