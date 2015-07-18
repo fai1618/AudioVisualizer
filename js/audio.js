@@ -8,12 +8,12 @@ var audioVisualize = function(){
 
 
 
-//フィルター(add!!!!!)
+//マイク確認用
     filter = audioContext.createBiquadFilter();
     //filter.type = 0;
     filter.frequency.value = 440;
 
-    this.init = function (){
+    this.init = function (){//マイク使えるか確認
         var audioObj = {"audio":true};
 
         //エラー処理
@@ -40,7 +40,7 @@ var audioVisualize = function(){
             alert("マイクデバイスがありません");
         }
     }
-
+//マイク確認用end
 
 
     self.analyser = audioContext.createAnalyser();
