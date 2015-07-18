@@ -156,7 +156,7 @@ function render() {
         move(Icos2, Icos2Camera, audio.difference, 3, -3);
 
         if (ringAddCounter >= 10) { //カメラ1つのときは緑の線引かない
-            addLine(Icos2, preIcos2Position, 0xff00c8);
+            lineAdder(Icos2, preIcos2Position, 0xff00c8);
         }
 
         ring2.position.set(Icos2.position.x, Icos2.position.y, Icos2.position.z);
@@ -180,7 +180,7 @@ function render() {
             //動き
             move(Icos, IcosCamera, audio.difference, 3, -3);
             //chaseLine
-            addLine(Icos, preIcosPosition, 0x00c8ff);
+            lineAdder(Icos, preIcosPosition, 0x00c8ff);
 
             ring.position.set(Icos.position.x, Icos.position.y, Icos.position.z);
             ringA.position.set(Icos.position.x, Icos.position.y, Icos.position.z);
@@ -349,11 +349,12 @@ function cameraMovingJudge(camera,object){//物体がどれくらいカメラの
     }
 }
 //-----------------------------------------------
-function addLine(object, prePosition, color) {
+    function lineAdder(object, prePosition, color) {
         var lineGeometry = new THREE.Geometry();
         var lineMaterial = new THREE.LineBasicMaterial({
             color: color
         });
+
         lineGeometry.vertices.push(new THREE.Vector3(prePosition.x, prePosition.y, prePosition.z));
         lineGeometry.vertices.push(new THREE.Vector3(object.position.x, object.position.y, object.position.z));
         var line = new THREE.Line(lineGeometry, lineMaterial);
