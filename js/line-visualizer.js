@@ -1,6 +1,4 @@
 $(function(){
-
-
     var canvas = $("<canvas/>")[0];
     $(canvas).attr("id","line-visualizer");
 
@@ -14,7 +12,6 @@ $(function(){
         $(canvas).css("height",$(window).height()*1/5);
     });
 
-
     $("body").append(canvas);
     var canvasContext = canvas.getContext('2d');
     $(canvas).attr("width",audio.analyser.frequencyBinCount*1.3+10);
@@ -23,11 +20,11 @@ $(function(){
     $(canvas).attr("height",$(canvas).attr("width")*$(window).height()/$(window).width());
 
     var height = $(canvas).attr("height");
-    var BorderWidth = audio.analyser.frequencyBinCount * 10;
-    var a  = 0.5;
-    var _r = '00';
-    var _g = 'aa';
-    var _b = 'e1';
+        BorderWidth = audio.analyser.frequencyBinCount * 10,
+        a  = 0.5,
+        _r = '00',
+        _g = 'aa',
+        _b = 'e1';
 
     canvasContext.fillStyle = '#ffffff';
     canvasContext.fillRect(10, 10, 100,100);
@@ -63,7 +60,5 @@ $(function(){
     }//render
 
     lineRender();
-
-
 
 });

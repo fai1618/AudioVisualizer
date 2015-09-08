@@ -2,13 +2,14 @@
 var stats;
 // set stats
 // 左上に表示するようCSSを記述してbody直下に表示
-stats = new Stats();
+stats = new window.Stats();
 stats.domElement.style.position = 'absolute';
 stats.domElement.style.right = '0px';
 stats.domElement.style.top = '0px';
 document.body.appendChild(stats.domElement);
 
 
+var THREE = window.THREE;
 
 var scene = new THREE.Scene();
 // カメラ設定 ------------------------------------------
