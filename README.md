@@ -1,9 +1,9 @@
-#Audio Visualizer(three.js)
-##Demo
+# Audio Visualizer(three.js)
+## Demo
 http://kouhei.github.io/AudioVisualizer/
 
-##Usage
+## Usage
 please press Enter to choose a audiofile.
 
-##LICENCE
+## LICENCE
 MIT
